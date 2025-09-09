@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Finder - Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #6a11cb, #2575fc);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .login-container input:focus {
+      border-color: #2575fc;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #2575fc;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .login-container button:hover {
+      background: #6a11cb;
+    }
+
+    .login-container p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .login-container a {
+      color: #2575fc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Enter Username" required>
+      <input type="password" id="password" placeholder="Enter Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+    <p><a href="index.html">⬅ Back to Home</a></p>
+  </div>
+
+  <!-- Axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // Get the form element
+    const loginForm = document.getElementById('loginForm');
+
+    // Listen for form submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent page refresh
+
+      // Get input values
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        // Send POST request to backend login route
+        const response = await axios.post('http://localhost:5000/login', {
+          username,
+          password
+        });
+
+        // On success, show message and save token (if using JWT)
+        alert(response.data.message || 'Login successful!');
+        if(response.data.token){
+          localStorage.setItem('token', response.data.token);
+        }
+
+        // Redirect to home or history page after login
+        window.location.href = 'index.html'; // Change if you want
+      } catch (error) {
+        // Show error message if login fails
+        alert(error.response?.data?.error || 'Login failed!');
+      }
+    });
+  </script>
+</body>
+</html>

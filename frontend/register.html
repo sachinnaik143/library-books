@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Finder - Register</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #ff416c, #ff4b2b);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .register-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+      width: 380px;
+      text-align: center;
+    }
+
+    .register-container h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .register-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .register-container input:focus {
+      border-color: #ff416c;
+    }
+
+    .register-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #ff416c;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .register-container button:hover {
+      background: #ff4b2b;
+    }
+
+    .register-container p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .register-container a {
+      color: #ff416c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Register</h1>
+    <!-- Form ID added for JS -->
+    <form id="registerForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+    <p><a href="index.html">⬅ Back to Home</a></p>
+  </div>
+
+  <!-- Axios CDN for API requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // Get the form element
+    const registerForm = document.getElementById('registerForm');
+
+    // Listen for form submission
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent page refresh
+
+      // Get input values
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Simple password confirmation check
+      if(password !== confirmPassword){
+        alert("Passwords do not match!");
+        return;
+      }
+
+      try {
+        // Send POST request to backend register route
+        const response = await axios.post('http://localhost:5000/register', {
+          fullName,
+          email,
+          username,
+          password
+        });
+
+        // On success, show message
+        alert(response.data.message || 'Registration successful!');
+        // Redirect to login page after successful registration
+        window.location.href = 'login.html';
+      } catch (error) {
+        // Show error message if registration fails
+        alert(error.response?.data?.error || 'Registration failed!');
+      }
+    });
+  </script>
+</body>
+</html>
